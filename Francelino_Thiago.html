@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Busca Filmes</title>
+</head>
+<body>
+	<h1>BIBLIOTECA DE FILMES</h1>
+	
+	Nome do Filme <input type="text" name="nome" id="nome">
+	<h5>PRESIOME ENTER PARA PESQUISAR</h5>
+	<p></p>
+	<table id="tabela" style="font-size: 18pt">
+		<tr>
+			<th>Descrição do Filme</th>
+		</tr>
+		<tr>
+			<td>Titulo:</td>
+			<td id="title"></td>
+		<tr>
+			<td>Ano:</td>
+			<td id="ano"></td>
+		</tr>
+		<tr>
+			<td>Gênero:</td>
+			<td id="genero"></td>
+		</tr>
+		<tr>
+			<td>Tempo:</td>
+			<td id="tempo"></td>
+		</tr>	
+		<tr>
+			<td>Diretor:</td>
+			<td id="diretor"></td>
+		</tr>	
+		<tr>
+			<td>Escritor:</td>
+			<td id="escritor"></td>
+		</tr>	
+		<tr>
+			<td>Idioma:</td>
+			<td id="idioma"></td>
+		</tr>
+	</table>
+	<p style="font-size: 18pt">Poster do Filme:</p>
+	<img src="" width="260" height="333" id="poster">
+	<script>
+		var obj, dbParam, xmlhttp, myObj, titulo, url, sespaco;
+		const inputEle = document.getElementById('nome');
+		inputEle.addEventListener('keyup', function(e){
+		  	var key = e.which || e.keyCode;
+		  	if (key == 13) { // codigo da tecla enter
+		    // colocas aqui a tua função a rodar
+		    titulo = document.getElementById('nome').value;
+		    sespaco = titulo.replace( / /gi,'+');
+		    url = "http://www.omdbapi.com/?apikey=3f8dca95&t="+sespaco;
+		  	obj = {table: "customers", limit: 20 };
+			dbParam = JSON.stringify(obj);
+			xmlhttp = new XMLHttpRequest();
+			xmlhttp.open("GET", url , true);
+			xmlhttp.onreadystatechange = function() {
+			  	if (this.readyState == 4 && this.status == 200) {
+				   	myObj = JSON.parse(this.responseText);
+				       
+				    document.getElementById("title").innerHTML = myObj.Title;
+				    document.getElementById("ano").innerHTML = myObj.Year;
+				    document.getElementById("genero").innerHTML = myObj.Genre;
+				    document.getElementById("tempo").innerHTML = myObj.Runtime
+				    document.getElementById("diretor").innerHTML = myObj.Director;
+				    document.getElementById("escritor").innerHTML = myObj.Writer;
+				    document.getElementById("idioma").innerHTML = myObj.Language;
+				    document.getElementById("poster").src = myObj.Poster;
+			  	}
+			};
+			xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+			xmlhttp.send("x=" + dbParam);
+			}
+		});
+	</script>
+
+</body>
+</html>
